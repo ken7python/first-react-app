@@ -1,26 +1,39 @@
 import { useState } from "react"
-import TaskItem from "./components/TaskItem.jsx";
+import {v4 as uuidv4} from "uuid"
+// import TaskItem from "./components/TaskItem.jsx";
+function TaskItem({ task, onDelete }) {
+    return (
+        <li>
+            { task.title }
+            <button onClick={() => onDelete(task.id)} style={{marginLeft: 20}}>削除</button>
+        </li>
+    )
+}
 
 export default function App() {
     const [tasks, setTasks] = useState([
-        "Reactの勉強",
-        "応用情報の勉強",
-        "デザイン練習"
+        {id: uuidv4(), title: "Reactの勉強"},
+        {id: uuidv4(), title: "応用情報の勉強"},
+        {id: uuidv4(), title: "デザイン練習"}
     ]);
     const [text, setText] = useState("");
     const [visible, setVisible] = useState(true);
 
+    function deleteTask(id) {
+        console.log(`deleteTask called for index: ${id}`)
+        setTasks((prev) => prev.filter(task => task.id !== id));
+    }
+
     // 表示用データを事前に作成(ロジック分離)
     console.log(tasks);
-    const taskItems = tasks.map((task, index) => {
-        const label = `${index + 1}. ${task}`;
-        return <TaskItem key={index} task={label}/>
+    const taskItems = tasks.map((task) => {
+        return <TaskItem key={task.id} task={task} onDelete={deleteTask}/>
     });
     console.log(taskItems)
 
     function addTask() {
         if (!text) return;
-        setTasks([...tasks, text]);
+        setTasks((prev) => [...prev, {id: uuidv4(), title: text} ]);
         setText("");
     }
 
