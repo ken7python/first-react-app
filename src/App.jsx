@@ -12,9 +12,10 @@ export default function App() {
 
     // 表示用データを事前に作成(ロジック分離)
     console.log(tasks);
-    const taskItems = tasks.map((task, index) => (
-        <TaskItem key={index} task={task} />
-    ));
+    const taskItems = tasks.map((task, index) => {
+        const label = `${index + 1}. ${task}`;
+        return <TaskItem key={index} task={label}/>
+    });
     console.log(taskItems)
 
     function addTask() {
